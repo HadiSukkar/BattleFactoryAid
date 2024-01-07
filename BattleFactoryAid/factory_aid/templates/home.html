@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Factory Aid{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <h1>{% block header %}Welcome to the Factory Aid{% endblock %}</h1>
+    </header>
+
+    <main>
+        {% block content %}
+        <!-- This is where child templates will inject content -->
+        {% endblock %}
+    </main>
+
+</body>
+</html>

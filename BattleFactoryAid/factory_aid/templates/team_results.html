@@ -1,0 +1,24 @@
+{% extends 'home.html' %}
+
+{% block content %}
+  <h2>Search Results</h2>
+
+  <h2>Top 10 Sets</h2>
+  <table>
+      <thead>
+          <tr>
+              <th>Set Name</th>
+              <th>Percentage</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for set_id, pokemon_set, percentage in top_sets %}
+          <tr>
+              <td>{{ pokemon_set }}</td>
+              <td>{{ percentage }}</td>
+          </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+
+{% endblock %}
