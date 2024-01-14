@@ -1,21 +1,161 @@
 {% extends 'home.html' %}
 
 {% block content %}
-  <h2>Team Search</h2>
+  <h2 class="text-center">Team Search</h2>
   <form method="post" action="{% url 'team_search' %}">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Search</button>
+    <div class="row">
+      <div class="col-md-6 mb-3 align-items-center">
+        <div class="text-center">
+          {{ search_form.type_phrase.label_tag }}
+        </div>
+        <div class="text-center">
+          {{  search_form.type_phrase  }}
+        </div>
+      </div>
+      <div class="col-md-6 mb-3 align-items-center">
+        <div class="text-center">
+          {{  search_form.style_phrase.label_tag  }}
+        </div>
+        <div class="text-center">
+          {{  search_form.style_phrase  }}
+        </div>
+      </div>
+    </div>
+    
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <div class="text-center">
+          {{  search_form.pokemon_1.label_tag  }}
+          {{  search_form.pokemon_1  }}
+        </div>
+        <div class="text-center">
+          {{  search_form.pokemon_2.label_tag  }}
+          {{  search_form.pokemon_2  }}
+        </div>
+        <div class="text-center">
+          {{  search_form.pokemon_3.label_tag  }}
+          {{  search_form.pokemon_3  }}
+        </div>
+        <div class="text-center">
+          {{  search_form.pokemon_4.label_tag  }}
+          {{  search_form.pokemon_4  }}
+        </div>
+        <div class="text-center">
+          {{  search_form.pokemon_5.label_tag  }}
+          {{  search_form.pokemon_5  }}
+        </div>
+        <div class="text-center">
+          {{  search_form.pokemon_6.label_tag  }}
+          {{  search_form.pokemon_6  }}
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="row">
+            <label class="col-sm-8 col-form-label text-sm-end" for="{{ search_form.included_pokemon_1.id_for_label }}">Select Enemy's first Pokémon:</label>
+            <div class="col-sm-4">
+                {{ search_form.included_pokemon_1 }}
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-sm-8 col-form-label text-sm-end" for="{{ search_form.included_pokemon_2.id_for_label }}">Select Enemy's second Pokémon:</label>
+            <div class="col-sm-4">
+                {{ search_form.included_pokemon_2 }}
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-sm-8 col-form-label text-sm-end" for="{{ search_form.included_pokemon_3.id_for_label }}">Select Enemy's third Pokémon:</label>
+            <div class="col-sm-4">
+                {{ search_form.included_pokemon_3 }}
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-sm-8 col-form-label text-sm-end" for="{{ search_form.tier.id_for_label }}">Tier:</label>
+            <div class="col-sm-4">
+                {{ search_form.tier }}
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-sm-8 col-form-label text-sm-end" for="{{ search_form.open_level.id_for_label }}">Open Level:</label>
+            <div class="col-sm-4">
+                {{ search_form.open_level }}
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center">
+      <button type="submit" name="team_search" class="btn btn-primary btn-lg" style="font-size: 3rem;">Search</button>
+    </div>
   </form>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  
+  <h2 class="text-center">Search Results</h2>
+
+  <h3 class="text-center">Top 10 Sets</h3>
+  <div class="table-responsive">
+    <table class="table w-100">
+        <thead>
+            <tr>
+                {% for set_id, pokemon_set, image, percentage in top_sets %}
+                  <th>{{  pokemon_set  }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+              {% for set_id, pokemon_set, image, percentage in top_sets %}
+                <td>
+                  {% if image %}
+                    <img src="{{  image  }}" alt="Image for {{  pokemon_set  }}">
+                  {% else %}
+                    No image available
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+        </tbody>
+        <tbody>
+            <tr>
+              {% for set_id, pokemon_set, image, percentage in top_sets %}
+                <td>{{ percentage }}</td>
+              {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+  </div>
+
+  <form method="post" action="{% url 'pokemon_search' %}" class="text-center">
+    {% csrf_token %}
+    {{ pokemon_search_form.as_p}}
+    <button type="submit" name="pokemon_search" class="btn btn-primary btn-lg">Pokemon Search</button>
+  </form>
+
+  {% if pokemon_search_results %}
+    <div class="table-responsive">
+      <table class="table w-100">
+        <thead>
+          <th>Set Name</th>
+          <th>Percentage</th>
+        </thead>
+        <tbody>
+          {% for set_id, percentage in pokemon_search_results.items %}
+            <tr>
+              <td> {{ set_id  }}</td>
+              <td> {{ percentage  }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
 
   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
   <script>
     $(document).ready(function() {
-      $('#id_pokemon_1, #id_pokemon_2, #id_pokemon_3, #id_pokemon_4, #id_pokemon_5, #id_pokemon_6').select2();
+      $('#id_pokemon_1, #id_pokemon_2, #id_pokemon_3, #id_pokemon_4, #id_pokemon_5, #id_pokemon_6, #id_included_pokemon_1, #id_included_pokemon_2, #id_included_pokemon_3').select2();
     });
   </script>
 {% endblock %}

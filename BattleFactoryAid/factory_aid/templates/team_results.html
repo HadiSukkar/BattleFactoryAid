@@ -21,4 +21,15 @@
       </tbody>
   </table>
 
+  <form method="get" action="{% url 'team_search' %}">
+    <input type="text" name="pokemon_name" placeholder="Enter Pokemon name" required>
+    <button type="submit">Search</button>
+  </form>
+
+  {% if pokemon_search_results %}
+    <div>
+
+    </div>
+  {% endif %}
+
 {% endblock %}

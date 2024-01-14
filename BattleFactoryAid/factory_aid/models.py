@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 class Pokemon(models.Model):
     set_id = models.AutoField(primary_key=True)
@@ -8,6 +9,12 @@ class Pokemon(models.Model):
     pokemon = models.CharField(max_length=100)
     pokemon_set = models.CharField(max_length=100)
     item = models.CharField(max_length=100)
+    image = models.ImageField(
+        _("Image"),
+        upload_to='pokemon_images/',
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
         return f"{self.pokemon_set}"

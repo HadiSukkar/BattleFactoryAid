@@ -43,6 +43,7 @@ TIER_CHOICES = [
 ]
 
 pokemon_names = [(name, name) for name in Pokemon.objects.values_list('pokemon', flat=True).distinct().order_by('pokemon')]
+set_names = [(name, name) for name in Pokemon.objects.values_list('pokemon_set', flat=True).distinct().order_by('pokemon_set')]
 
 class TeamSearchForm(forms.Form):
     type_phrase = forms.ChoiceField(
@@ -63,6 +64,10 @@ class TeamSearchForm(forms.Form):
     pokemon_5 = forms.ChoiceField(choices=pokemon_names, required=False, label='Select Pokémon 5')
     pokemon_6 = forms.ChoiceField(choices=pokemon_names, required=False, label='Select Pokémon 6')
 
+    included_pokemon_1 = forms.ChoiceField(choices=[('', 'None')] + pokemon_names + set_names, required=False, label='Select Enemy\'s first Pokémon')
+    included_pokemon_2 = forms.ChoiceField(choices=[('', 'None')] + pokemon_names + set_names, required=False, label='Select Enemy\'s second Pokémon')
+    included_pokemon_3 = forms.ChoiceField(choices=[('', 'None')] + pokemon_names + set_names, required=False, label='Select Enemy\'s third Pokémon')
+
     tier = forms.ChoiceField(choices=TIER_CHOICES, required=False, label='Tier')
     open_level = forms.BooleanField(required=False, label='Open Level')
 
@@ -70,3 +75,7 @@ class TeamSearchForm(forms.Form):
         data = self.cleaned_data['pokemon_names']
         pokemon_list = [name.strip() for name in data.split(',')]
         return pokemon_list
+    
+    
+class PokemonSearchForm(forms.Form):
+    pokemon_name = forms.CharField(label='Enter Pokemon name', required=False, max_length=100)
